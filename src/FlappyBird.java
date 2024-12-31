@@ -5,7 +5,12 @@ import java.util.Random;
 import javax.swing.*;
 
 
-public class FlappyBird extends JPanel{
+
+// implements used when to copy certain structures of interface and it can be done multiple times
+// extends used only for class to inherit some kind of properties from parent to child
+
+
+public class FlappyBird extends JPanel implements   ActionListener , KeyListener{
     
 
     // dimensions of window
@@ -49,9 +54,21 @@ public class FlappyBird extends JPanel{
     // game Logic 
       Bird bird;
 
+      // game Timer 
+      Timer gameLoop;
+
+
+
+      // movements
+      int velocityY = 0;
+      int gravity = 1;
+
       FlappyBird() {
           setPreferredSize( new Dimension(boardWidth , boardHeight));
           setBackground(Color.blue);
+
+          setFocusable(true);
+          addKeyListener(this);
 
           //Load images 
 
@@ -62,12 +79,17 @@ public class FlappyBird extends JPanel{
 
           //Bird 
            bird = new Bird(birdImg);
+
+           // game Loop 
+           gameLoop = new Timer(1000/60, this);
+           gameLoop.start();
           
       }
 
       public void paintComponent( Graphics g ) {
           super.paintComponent(g);
           draw(g);
+
       }
 
 
@@ -78,6 +100,36 @@ public class FlappyBird extends JPanel{
          g.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height, null);
 
       }
+
+
+      public void move () {
+          velocityY += gravity;
+          bird.y += velocityY;       
+          bird.y = Math.max(bird.y , 0);
+              
+      }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+           move();
+           repaint();
+    }
+
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+          if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+              velocityY = -6;
+          }
+    }
+
+
+    @Override
+    public void keyTyped(KeyEvent e) { }
+
+   
+    @Override
+    public void keyReleased(KeyEvent e) { }
 
 
 }
