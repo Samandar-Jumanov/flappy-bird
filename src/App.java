@@ -10,11 +10,8 @@ public class App {
            int boardWidth = 360;
            int boardHeight = 640;
 
-
            // Setting up frame 
-
            JFrame frame  = new JFrame("Falppy bird");
-          //    frame.setVisible(true);
            frame.setSize(boardWidth , boardHeight);
            frame.setLocationRelativeTo(null);
            frame.setResizable(false);
@@ -25,8 +22,6 @@ public class App {
            frame.pack();
            flappyBird.requestFocus();
            frame.setVisible(true);
-
-           
 
       }
 }

@@ -128,7 +128,6 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
         normalModeBg = new ImageIcon("images/normal-mode.jpg").getImage();
         easyModeBg = new ImageIcon("images/easy-mode.png").getImage();
         modeBg = new ImageIcon("images/selection.jpg").getImage();
-
         
 
         
@@ -144,8 +143,8 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
                 placePipes();
             }
         });
-
         gameLoop = new Timer(1000/60, this);
+        
     }
 
     // Place pipes method
@@ -307,7 +306,6 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (currentState == GameState.MODE_SELECT) {
-            // Updating modes based on arrow keys 
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_UP -> {
                     int ordinal = (currentMode.ordinal() - 1 + GameMode.values().length) % GameMode.values().length;
@@ -325,10 +323,10 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
                 }
             }
         } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            velocityY = -9;
-            
             if (gameOver) {
                 resetGame();
+            } else {
+                velocityY = -9;
             }
         }
     }
@@ -341,12 +339,12 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
     // Reset game
     private void resetGame() {
+        currentState = GameState.MODE_SELECT;
         bird.y = birdY;
         velocityY = 0;
         pipes.clear();
         gameOver = false;
         score = 0;
-        currentState = GameState.MODE_SELECT;
         gameLoop.stop();
         placePipesTimer.stop();
     }
@@ -356,14 +354,9 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {}
-    
+
+      
     // Main method to start the game
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Flappy Bird");
-        FlappyBird flappyBird = new FlappyBird();
-        frame.add(flappyBird);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-    }
+   
+    
 }
