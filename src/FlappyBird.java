@@ -30,11 +30,14 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     double score = 0;
 
     // Images
-    Image backImg;
     Image birdImg;
     Image topPipeImg;
     Image bottomPipeImg;
-    Image modeSelectionBg;
+    Image hardModeBg;
+    Image normalModeBg;
+    Image easyModeBg;
+    Image modeBg;
+
 
 
     // Bird calculations
@@ -118,11 +121,16 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
         addKeyListener(this);
 
         // Load images
-        backImg = new ImageIcon("images/bg.png").getImage();
         birdImg = new ImageIcon("images/bird.png").getImage();
         topPipeImg = new ImageIcon("images/top.png").getImage();
         bottomPipeImg = new ImageIcon("images/bottom.png").getImage();
-        modeSelectionBg = new ImageIcon("images/mode.jpg").getImage();
+        hardModeBg = new ImageIcon("images/hard-mode.jpg").getImage();
+        normalModeBg = new ImageIcon("images/normal-mode.jpg").getImage();
+        easyModeBg = new ImageIcon("images/easy-mode.png").getImage();
+        modeBg = new ImageIcon("images/selection.jpg").getImage();
+
+        
+
         
 
         // Initialize bird and pipes
@@ -162,13 +170,21 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
     // Draw method
     public void draw(Graphics g) {
-        if (currentState == GameState.MODE_SELECT) {
-            g.drawImage(modeSelectionBg, 0, 0, boardWidth, boardHeight, null);
-            drawModeSelect(g);
-        } else {
+         Image currentImg = easyModeBg;
+         
+         currentImg = switch(currentMode) {
+              case EASY ->  easyModeBg;
+              case NORMAL -> normalModeBg;
+              case HARD -> hardModeBg;
+         };
 
+        if (currentState == GameState.MODE_SELECT) {
+            g.drawImage(modeBg, 0, 0, boardWidth, boardHeight, null);
+            drawModeSelect(g);
+            
+        } else {
             // Draw game elements
-            g.drawImage(backImg, 0, 0, boardWidth, boardHeight, null);
+            g.drawImage(currentImg, 0, 0, boardWidth, boardHeight, null);
             g.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height, null);
             
             for (Pipe p : pipes) {
@@ -179,7 +195,11 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             g.setFont(new Font("Arial", Font.PLAIN, 32));
             
             if (gameOver) {
+                g.setColor(Color.BLACK);  // Set text color to red
+                Font font = new Font("Arial", Font.BOLD, 18);  // Changed PLAIN to BOLD // Create smaller font, adjust 12 as needed
+                g.setFont(font);
                 g.drawString("Game over: " + String.valueOf((int) score), 10, 35);
+                g.drawString("Double press space to restart", 10, 55);  // Reduced spacing to match smaller font`
             } else {
                 g.drawString(String.valueOf((int) score), 10, 35);
             }
@@ -239,8 +259,6 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             case HARD -> BIRD_HARD_HEIGHT;
       };
 
-
-        
     
         
         velocityY += currentGravity;
